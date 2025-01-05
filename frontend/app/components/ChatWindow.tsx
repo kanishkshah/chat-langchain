@@ -105,8 +105,9 @@ export function ChatWindow(props: { conversationId: string }) {
     try {
       const sourceStepName = "FindDocs";
       let streamedResponse: Record<string, any> = {};
+      console.log(process.env.NEXT_PUBLIC_API_URL);
       const remoteChain = new RemoteRunnable({
-        url: apiBaseUrl + "/chat",
+        url: process.env.NEXT_PUBLIC_API_URL + "/chat",
         options: {
           timeout: 60000,
         },
