@@ -61,7 +61,7 @@ def get_agent(llm, *, chat_history: Optional[list] = None):
     chat_history = chat_history or []
     system_message = SystemMessage(
         content=(
-            "You are an expert developer tasked answering questions about the LangChain Python package. "
+            "You are an expert developer tasked answering questions about the Crustdata API. "
             "You have access to a LangChain knowledge bank which you can query but know NOTHING about LangChain otherwise. "
             "You should always first query the knowledge bank for information on the concepts in the question. "
             "For example, given the following input question:\n"

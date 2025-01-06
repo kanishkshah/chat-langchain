@@ -235,9 +235,9 @@ export function ChatWindow(props: { conversationId: string }) {
             marginTop={"10px"}
             textAlign={"center"}
           >
-            Ask me anything about LangChain&apos;s{" "}
+            Ask me anything about Crustdata&apos;s{" "}
             <Link href="https://python.langchain.com/" color={"blue.200"}>
-              Python documentation!
+              APIs!
             </Link>
           </Heading>
         )}
