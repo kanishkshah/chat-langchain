@@ -152,9 +152,9 @@ def ingest_docs():
     record_manager.create_schema()
 
     docs_from_crustable = load_crustdata_docs()
-    logger.info(f"Loaded {len(docs_from_crustable)} docs from documentation")
+    # logger.info(f"Loaded {len(docs_from_crustable)} docs from documentation")
     docs_from_crustable_discovery = load_crustdata_discovery_docs()
-    logger.info(f"Loaded {len(docs_from_crustable_discovery)} docs from documentation
+    # logger.info(f"Loaded {len(docs_from_crustable_discovery)} docs from documentation
     # docs_from_documentation = load_langchain_docs()
     # logger.info(f"Loaded {len(docs_from_documentation)} docs from documentation")
     # docs_from_api = load_api_docs()
