@@ -3,10 +3,10 @@ from operator import itemgetter
 from typing import Dict, List, Optional, Sequence
 
 import weaviate
-from constants import WEAVIATE_DOCS_INDEX_NAME
+from backend.constants import WEAVIATE_DOCS_INDEX_NAME
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from ingest import get_embeddings_model
+from backend.ingest import get_embeddings_model
 from langchain_anthropic import ChatAnthropic
 from langchain_community.chat_models import ChatCohere
 from langchain_community.vectorstores import Weaviate

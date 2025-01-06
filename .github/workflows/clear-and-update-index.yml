@@ -18,7 +18,7 @@ jobs:
         uses: snok/install-poetry@v1
 
       - name: Install dependencies
-        run: poetry install
+        run: poetry install --no-root
 
       - name: Clear index
         run: poetry run python _scripts/clear_index.py

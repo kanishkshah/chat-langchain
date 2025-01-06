@@ -2,11 +2,11 @@
 import logging
 import os
 import re
-from parser import langchain_docs_extractor
+from backend.parser import langchain_docs_extractor
 
 import weaviate
 from bs4 import BeautifulSoup, SoupStrainer
-from constants import WEAVIATE_DOCS_INDEX_NAME
+from backend.constants import WEAVIATE_DOCS_INDEX_NAME
 from langchain.document_loaders import RecursiveUrlLoader, SitemapLoader
 from langchain.indexes import SQLRecordManager, index
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -36,36 +36,36 @@ def metadata_extractor(meta: dict, soup: BeautifulSoup) -> dict:
     }
 
 
-def load_langchain_docs():
-    return SitemapLoader(
-        "https://python.langchain.com/sitemap.xml",
-        filter_urls=["https://python.langchain.com/"],
-        parsing_function=langchain_docs_extractor,
-        default_parser="lxml",
-        bs_kwargs={
-            "parse_only": SoupStrainer(
-                name=("article", "title", "html", "lang", "content")
-            ),
-        },
-        meta_function=metadata_extractor,
-    ).load()
+# def load_langchain_docs():
+#     return SitemapLoader(
+#         "https://python.langchain.com/sitemap.xml",
+#         filter_urls=["https://python.langchain.com/"],
+#         parsing_function=langchain_docs_extractor,
+#         default_parser="lxml",
+#         bs_kwargs={
+#             "parse_only": SoupStrainer(
+#                 name=("article", "title", "html", "lang", "content")
+#             ),
+#         },
+#         meta_function=metadata_extractor,
+#     ).load()
 
 
-def load_langsmith_docs():
-    return RecursiveUrlLoader(
-        url="https://docs.smith.langchain.com/",
-        max_depth=8,
-        extractor=simple_extractor,
-        prevent_outside=True,
-        use_async=True,
-        timeout=600,
-        # Drop trailing / to avoid duplicate pages.
-        link_regex=(
-            f"href=[\"']{PREFIXES_TO_IGNORE_REGEX}((?:{SUFFIXES_TO_IGNORE_REGEX}.)*?)"
-            r"(?:[\#'\"]|\/[\#'\"])"
-        ),
-        check_response_status=True,
-    ).load()
+# def load_langsmith_docs():
+#     return RecursiveUrlLoader(
+#         url="https://docs.smith.langchain.com/",
+#         max_depth=8,
+#         extractor=simple_extractor,
+#         prevent_outside=True,
+#         use_async=True,
+#         timeout=600,
+#         # Drop trailing / to avoid duplicate pages.
+#         link_regex=(
+#             f"href=[\"']{PREFIXES_TO_IGNORE_REGEX}((?:{SUFFIXES_TO_IGNORE_REGEX}.)*?)"
+#             r"(?:[\#'\"]|\/[\#'\"])"
+#         ),
+#         check_response_status=True,
+#     ).load()
 
 
 def simple_extractor(html: str) -> str:
@@ -73,9 +73,29 @@ def simple_extractor(html: str) -> str:
     return re.sub(r"\n\n+", "\n\n", soup.text).strip()
 
 
-def load_api_docs():
+# def load_api_docs():
+#     return RecursiveUrlLoader(
+#         url="https://api.python.langchain.com/en/latest/",
+#         max_depth=8,
+#         extractor=simple_extractor,
+#         prevent_outside=True,
+#         use_async=True,
+#         timeout=600,
+#         # Drop trailing / to avoid duplicate pages.
+#         link_regex=(
+#             f"href=[\"']{PREFIXES_TO_IGNORE_REGEX}((?:{SUFFIXES_TO_IGNORE_REGEX}.)*?)"
+#             r"(?:[\#'\"]|\/[\#'\"])"
+#         ),
+#         check_response_status=True,
+#         exclude_dirs=(
+#             "https://api.python.langchain.com/en/latest/_sources",
+#             "https://api.python.langchain.com/en/latest/_modules",
+#         ),
+#     ).load()
+
+def load_crustdata_docs():
     return RecursiveUrlLoader(
-        url="https://api.python.langchain.com/en/latest/",
+        url="https://www.notion.so/crustdata/Crustdata-Discovery-And-Enrichment-API-c66d5236e8ea40df8af114f6d447ab48/",
         max_depth=8,
         extractor=simple_extractor,
         prevent_outside=True,
@@ -87,12 +107,23 @@ def load_api_docs():
             r"(?:[\#'\"]|\/[\#'\"])"
         ),
         check_response_status=True,
-        exclude_dirs=(
-            "https://api.python.langchain.com/en/latest/_sources",
-            "https://api.python.langchain.com/en/latest/_modules",
-        ),
     ).load()
 
+def load_crustdata_discovery_docs():
+    return RecursiveUrlLoader(
+        url="https://www.notion.so/crustdata/Crustdata-Dataset-API-Detailed-Examples-b83bd0f1ec09452bb0c2cac811bba88c",
+        max_depth=8,
+        extractor=simple_extractor,
+        prevent_outside=True,
+        use_async=True,
+        timeout=600,
+        # Drop trailing / to avoid duplicate pages.
+        link_regex=(
+            f"href=[\"']{PREFIXES_TO_IGNORE_REGEX}((?:{SUFFIXES_TO_IGNORE_REGEX}.)*?)"
+            r"(?:[\#'\"]|\/[\#'\"])"
+        ),
+        check_response_status=True,
+    ).load()
 
 def ingest_docs():
     WEAVIATE_URL = os.environ["WEAVIATE_URL"]
@@ -120,15 +151,20 @@ def ingest_docs():
     )
     record_manager.create_schema()
 
-    docs_from_documentation = load_langchain_docs()
-    logger.info(f"Loaded {len(docs_from_documentation)} docs from documentation")
-    docs_from_api = load_api_docs()
-    logger.info(f"Loaded {len(docs_from_api)} docs from API")
-    docs_from_langsmith = load_langsmith_docs()
-    logger.info(f"Loaded {len(docs_from_langsmith)} docs from Langsmith")
+    docs_from_crustable = load_crustdata_docs()
+    logger.info(f"Loaded {len(docs_from_crustable)} docs from documentation")
+    docs_from_crustable_discovery = load_crustdata_discovery_docs()
+    logger.info(f"Loaded {len(docs_from_crustable_discovery)} docs from documentation
+    # docs_from_documentation = load_langchain_docs()
+    # logger.info(f"Loaded {len(docs_from_documentation)} docs from documentation")
+    # docs_from_api = load_api_docs()
+    # logger.info(f"Loaded {len(docs_from_api)} docs from API")
+    # docs_from_langsmith = load_langsmith_docs()
+    # logger.info(f"Loaded {len(docs_from_langsmith)} docs from Langsmith")
 
     docs_transformed = text_splitter.split_documents(
-        docs_from_documentation + docs_from_api + docs_from_langsmith
+        # docs_from_documentation + docs_from_api + docs_from_langsmith
+        docs_from_crustable + docs_from_crustable_discovery
     )
     docs_transformed = [doc for doc in docs_transformed if len(doc.page_content) > 10]
 
