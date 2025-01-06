@@ -20,14 +20,13 @@ def clear():
         url=WEAVIATE_URL,
         auth_client_secret=weaviate.AuthApiKey(api_key=WEAVIATE_API_KEY),
     )
-    vectorstore = Weaviate(
-        client=client,
-        index_name=WEAVIATE_DOCS_INDEX_NAME,
-        text_key="text",
-        embedding=OpenAIEmbeddings(),
-        by_text=False,
-        attributes=["source", "title"],
-    )
+    vectorstore = Weaviate.from_existing_index(
+    client=client,
+    index_name=WEAVIATE_DOCS_INDEX_NAME,
+    text_key="text",
+    embedding=OpenAIEmbeddings(),
+    attributes=["source", "title"]
+)
 
     record_manager = SQLRecordManager(
         f"weaviate/{WEAVIATE_DOCS_INDEX_NAME}", db_url=RECORD_MANAGER_DB_URL
