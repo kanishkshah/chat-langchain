@@ -31,7 +31,7 @@ export function EmptyState(props: { onChoice: (question: string) => any }) {
               color={"gray.200"}
               textAlign={"center"}
             >
-              How do I use a RecursiveUrlLoader to load content from a page?
+              Tell me about the company data API.
             </Heading>
           </CardHeader>
         </Card>
@@ -52,7 +52,7 @@ export function EmptyState(props: { onChoice: (question: string) => any }) {
               color={"gray.200"}
               textAlign={"center"}
             >
-              What does RunnablePassthrough.assign() do?
+              Expand on use cases. You can assume a dummy scenario of choice.
             </Heading>
           </CardHeader>
         </Card>
@@ -74,7 +74,7 @@ export function EmptyState(props: { onChoice: (question: string) => any }) {
               color={"gray.200"}
               textAlign={"center"}
             >
-              Explain multi-vector retrieval and how it can improve results.
+              Is the Linkedin Company search API real-time?
             </Heading>
           </CardHeader>
         </Card>
@@ -95,7 +95,7 @@ export function EmptyState(props: { onChoice: (question: string) => any }) {
               color={"gray.200"}
               textAlign={"center"}
             >
-              How do I run a model locally on my laptop with Ollama?
+               Show me an example API call for Funding Milestones.
             </Heading>
           </CardHeader>
         </Card>
